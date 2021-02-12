@@ -8,6 +8,12 @@ is running in an isolated environment.
 While the class can be configured to send metrics somewhere else, it's probably
 not of great use outside of Hello Retail.
 
+## Installation
+
+```
+pipenv install git+https://bitbucket.org/addwish/hrinflux.git#egg=hrinflux
+```
+
 ## Usage
 
 ```
