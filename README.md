@@ -16,6 +16,7 @@ pipenv install git+https://bitbucket.org/addwish/hrinflux.git#egg=hrinflux
 
 ## Usage
 
+### Sending general metrics
 ```
 from hrinflux import Influx
 
@@ -25,4 +26,21 @@ influx = Influx()
 # Send a metric with a value (4 in this case).
 # Any additional keyword arguments are passed as tags.
 influx.send('metric-name', 4, tag="tag-value", another_tag=42)
+```
+
+### Timing code blocks
+
+The `time` method of an instance returns a context manager, which will submit
+the time taken in seconds once the block ends:
+
+```
+from hrinflux import Influx
+
+influx = Influx()
+
+with influx.time("metric-name", tag_name="optional-tag-value"):
+    some_expensive_calculation()
+    some_more()
+# A metric will be sent to `metric-name` with a value of how many seconds
+# it took to run the block.
 ```
