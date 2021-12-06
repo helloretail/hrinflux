@@ -1,3 +1,3 @@
 import setuptools
 
-setuptools.setup()
+setuptools.setup(zip_safe=False)
