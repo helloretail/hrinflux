@@ -8,7 +8,7 @@ class Influx(object):
 		self.addr = host, int(port)
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	
-	def send(self, name: str, value: Any, **args: Dict[str, str]) -> None:
+	def send(self, name: str, value: Any, **args: str) -> None:
 		self.sock.sendto(
 			("{}{} value={}".format(
 				name,
@@ -16,11 +16,11 @@ class Influx(object):
 				str(value))).encode(),
 			self.addr)
 	
-	def time(self, metric: str, **args: Dict[str, str]) -> '_Timed':
+	def time(self, metric: str, **args: str) -> '_Timed':
 		return _Timed(self, metric, **args)
 
 class _Timed(object):
-	def __init__(self, influx: Influx, metric: str, **args: Dict[str, str]):
+	def __init__(self, influx: Influx, metric: str, **args: str):
 		self.influx = influx
 		self.metric = metric
 		self.args = args
