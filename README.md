@@ -10,9 +10,9 @@ not of great use outside of Hello Retail.
 
 ## Installation
 
-```
-pipenv install git+https://github.com/helloretail/hrinflux.git#egg=hrinflux
-```
+With pipenv: `pipenv install git+https://github.com/helloretail/hrinflux.git#egg=hrinflux`
+
+With poetry: `poetry add git+https://github.com/helloretail/hrinflux.git`
 
 ## Usage
 
@@ -44,3 +44,7 @@ with influx.time("metric-name", tag_name="optional-tag-value"):
 # A metric will be sent to `metric-name` with a value of how many seconds
 # it took to run the block.
 ```
+
+### Debugging the line protocol
+Both `.send` and `.time` accepts the keyword argument `__debug`. If set to
+`True`, the message to be sent to influx will be printed out.
