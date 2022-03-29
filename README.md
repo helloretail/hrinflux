@@ -46,5 +46,5 @@ with influx.time("metric-name", tag_name="optional-tag-value"):
 ```
 
 ### Debugging the line protocol
-Both `.send` and `.time` accepts the keyword argument `__debug`. If set to
-`True`, the message to be sent to influx will be printed out.
+`.send` will return the string-version of the line-protocol message sent to
+influx.
