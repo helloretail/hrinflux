@@ -13,7 +13,15 @@ class Influx(object):
 			name,
 			"".join(",{}={}".format(k, v) for k, v in args.items()),
 			str(value))
-		self.sock.sendto(msg.encode(), self.addr)
+
+		try:
+			self.sock.sendto(msg.encode(), self.addr)
+		except socket.gaierror as e:
+			if e.errno == -3:
+				print(f"Ignoring socket error: {e}. (Metric will not be sent)")
+			else:
+				raise e
+		
 		return msg
 	
 	def time(self, metric: str, **args: str) -> '_Timed':
