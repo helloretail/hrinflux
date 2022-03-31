@@ -1,12 +1,27 @@
 import socket
 import time
 from types import TracebackType
-from typing import Dict, Optional, Type, Union
+from typing import Dict, Optional, Type, Union, Callable
+import sys
 
 class Influx(object):
-	def __init__(self, host: str = 'influxdb.addwish.com', port: int = 4444):
+	def __init__(
+			self,
+			host: str = 'influxdb.addwish.com',
+			port: int = 4444,
+			logger: Optional[Callable[[str], None]] = None):
 		self.addr = host, int(port)
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		self.logger: Callable[[str], None] = Influx._default_logger
+		if logger:
+			self.logger = logger
+	
+	@staticmethod
+	def _default_logger(msg: str) -> None:
+		print(msg, file=sys.stderr)
+	
+	def _log(self, msg: str) -> None:
+		self.logger(f"[hrinflux] {msg}")
 	
 	def send(self, name: str, value: Union[int, float], **args: str) -> str:
 		msg = "{}{} value={}".format(
@@ -16,11 +31,8 @@ class Influx(object):
 
 		try:
 			self.sock.sendto(msg.encode(), self.addr)
-		except socket.gaierror as e:
-			if e.errno == -3:
-				print(f"Ignoring socket error: {e}. (Metric will not be sent)")
-			else:
-				raise e
+		except Exception as e:
+			self._log(f"Ignoring an exception: {e}. (Metric will not be sent)")
 		
 		return msg
 	
