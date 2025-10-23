@@ -36,6 +36,14 @@ class Influx(object):
 		
 		return msg
 	
+	def close(self) -> None:
+		"""Close the socket connection."""
+		if hasattr(self, 'sock') and self.sock:
+			try:
+				self.sock.close()
+			except OSError:
+				pass # Socket already closed
+	
 	def time(self, metric: str, **args: str) -> '_Timed':
 		return _Timed(self, metric, **args)
 
